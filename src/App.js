@@ -10,14 +10,25 @@ import Customers from "./scenes/customers";
 import AddRate from "./scenes/addRate";
 import Sidebar from "./scenes/global/Sidebar";
 import Topbar from "./scenes/global/Topbar";
+import Logout from "./components/Logout";
+import ForgotPassword from "./components/ForgotPassword";
+import CreateAccount from "./scenes/createAccount";
+import AddBeneficiary from "./scenes/addBeneficiary";
+import TransferMoney from "./scenes/transferMoney";
+import ViewStatement from "./scenes/viewStatement";
+import ApproveAccount from "./scenes/approveAccount";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import RemoveBeneficiaries from "./scenes/removeBeneficiary";
 
 function App() {
   const [theme, colorMode] = useMode();
   // const [authenticated, setAuthenticated] = useState(false);
   const authenticated = useSelector((state) => state.auth.authenticated);
   const userType = useSelector((state) => state.auth.userType);
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.auth
+  );
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -26,10 +37,10 @@ function App() {
         {/* <Router> */}
         <Routes>
           <Route
-            path="/"
+            path="*"
             element={
               authenticated ? (
-                userType === "customer" ? (
+                userInfo.userType === "customer" ? (
                   <AuthenticatedContentForCustomer />
                 ) : (
                   <AuthenticatedContentForStaff />
@@ -54,10 +65,13 @@ function AuthenticatedContentForCustomer() {
         <Topbar />
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/rates" element={<Rates />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/confirmedRates" element={<ConfirmedRates />} />
-          <Route path="/add" element={<AddRate />} />
+          <Route path="/createAccount" element={<CreateAccount />} />
+          <Route path="/addBeneficiary" element={<AddBeneficiary />} />
+          <Route path="/removeBeneficiary" element={<RemoveBeneficiaries />} />
+          <Route path="/transferMoney" element={<TransferMoney />} />
+          <Route path="/viewStatement" element={<ViewStatement />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </main>
     </div>
@@ -72,11 +86,9 @@ function AuthenticatedContentForStaff() {
         <Topbar />
         {/* Add routes specific to staff */}
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/rates" element={<Rates />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/confirmedRates" element={<ConfirmedRates />} />
-          <Route path="/add" element={<AddRate />} />
+          <Route path="/" element={<ApproveAccount />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </main>
     </div>

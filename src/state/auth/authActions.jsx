@@ -7,16 +7,18 @@ export const registerUser = createAsyncThunk(
   'api/customer/register',
   async ({ username, fullname, password }, { rejectWithValue }) => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-      await axios.post(
-        `${backendURL}/api/customer/register`,
-        { username, fullname, password },
-        config
-      )
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const config = {
+            headers: headers
+        }
+        const response = await axios.post(
+            `${backendURL}/api/customer/register`,
+            { username, fullname, password },
+            config
+        )
+
+        return response.data
     } catch (error) {
     // return custom error message from backend if present
       if (error.response && error.response.data.message) {
@@ -32,16 +34,18 @@ export const loginCustomer = createAsyncThunk(
     `api/customer/authenticate`,
     async ({ username, password }, { rejectWithValue }) => {
       try {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
         const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: headers
         }
         const response = await axios.post(
           `${backendURL}/api/customer/authenticate`,
           { username, password },
           config
         )
+
+        console.log(response)
 
         return response.data;
       } catch (error) {
@@ -59,10 +63,10 @@ export const loginCustomer = createAsyncThunk(
     `api/staff/authenticate`,
     async ({ username, password }, { rejectWithValue }) => {
       try {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
         const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+            headers: headers
         }
         const response = await axios.post(
           `${backendURL}/api/staff/authenticate`,
